@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useToggle } from "ahooks";
-import { Avatar, Button, Drawer, List, Skeleton, Typography } from "antd";
+import { Avatar, Button, Drawer, List, Modal, Popconfirm, Skeleton, message} from "antd";
 
 const Admin = () => {
   const [open, { toggle: setIsOpen }] = useToggle();
   const [isShown, { toggle: setIsShown }] = useToggle();
+  const [isModalOpen, {toggle: setModalIsOpen}] = useToggle();
+  const [isPopOpen, {toggle: setPopIsOpen}] = useToggle();
 
   const [initLoading, setInitLoading] = useState(true);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<DataType[]>([]);
   const [list, setList] = useState<DataType[]>([]);
+  const [messageApi, contextHolder] = message.useMessage();
+
 
   interface DataType {
     gender?: string;
@@ -80,9 +84,25 @@ const Admin = () => {
         <Button onClick={onLoadMore}>loading more</Button>
       </div>
     ) : null;
+
+    const confirm = () => {
+        messageApi.open({
+            type: 'success',
+            content: 'Изменения сохранены!',
+          });
+      };
+    
+      const cancel = () => {
+        messageApi.open({
+            type: 'error',
+            content: 'Изменения не были сохранены!',
+          });
+      };
+
   return (
     <>
       <div>
+        {contextHolder}
         <Button style={{ zIndex: 10 }} onClick={setIsOpen}>
           ffff
         </Button>
@@ -107,7 +127,7 @@ const Admin = () => {
           loadMore={loadMore}
           dataSource={list}
           renderItem={(item) => (
-            <List.Item actions={[<a key="list-loadmore-edit">правка</a>]}>
+            <List.Item actions={[<Button onClick={setModalIsOpen} key="list-loadmore-edit">Правка</Button>]}>
               <Skeleton avatar title={false} loading={item.loading} active>
                 <List.Item.Meta
                   avatar={<Avatar src={item.picture.large} />}
@@ -119,6 +139,13 @@ const Admin = () => {
             </List.Item>
           )}
         />
+        
+        <Modal title="Basic Modal" open={isModalOpen} onOk={function(){setModalIsOpen(); confirm()}} onCancel={function(){setModalIsOpen(); cancel()}}>
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+      </Modal>
+
       </div>
     </>
   );
