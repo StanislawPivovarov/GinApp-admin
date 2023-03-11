@@ -1,19 +1,28 @@
 import React, { useEffect, useState } from "react";
 import { useToggle } from "ahooks";
-import { Avatar, Button, Drawer, List, Modal, Popconfirm, Skeleton, message} from "antd";
+import {
+  Avatar,
+  Button,
+  Drawer,
+  List,
+  Modal,
+  Popconfirm,
+  Skeleton,
+  message,
+} from "antd";
+import UploadImg from "@/components/UploadImg";
 
 const Admin = () => {
   const [open, { toggle: setIsOpen }] = useToggle();
   const [isShown, { toggle: setIsShown }] = useToggle();
-  const [isModalOpen, {toggle: setModalIsOpen}] = useToggle();
-  const [isPopOpen, {toggle: setPopIsOpen}] = useToggle();
+  const [isModalOpen, { toggle: setModalIsOpen }] = useToggle();
+  const [isPopOpen, { toggle: setPopIsOpen }] = useToggle();
 
   const [initLoading, setInitLoading] = useState(true);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<DataType[]>([]);
   const [list, setList] = useState<DataType[]>([]);
   const [messageApi, contextHolder] = message.useMessage();
-
 
   interface DataType {
     gender?: string;
@@ -85,19 +94,38 @@ const Admin = () => {
       </div>
     ) : null;
 
-    const confirm = () => {
-        messageApi.open({
-            type: 'success',
-            content: 'Изменения сохранены!',
-          });
-      };
-    
-      const cancel = () => {
-        messageApi.open({
-            type: 'error',
-            content: 'Изменения не были сохранены!',
-          });
-      };
+  const confirm = () => {
+    messageApi.open({
+      type: "success",
+      content: "Изменения сохранены!",
+    });
+  };
+
+  const cancel = () => {
+    messageApi.open({
+      type: "error",
+      content: "Изменения не были сохранены!",
+    });
+  };
+
+  const renderItems = (item: any) => (
+    <List.Item
+      actions={[
+        <Button onClick={setModalIsOpen} key="list-loadmore-edit">
+          Правка
+        </Button>,
+      ]}
+    >
+      <Skeleton avatar title={false} loading={item.loading} active>
+        <List.Item.Meta
+          avatar={<Avatar src={item.picture.large} />}
+          title={<a href="https://ant.design">{item.name?.last}</a>}
+          description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+        />
+        <div>content</div>
+      </Skeleton>
+    </List.Item>
+  );
 
   return (
     <>
@@ -126,26 +154,23 @@ const Admin = () => {
           itemLayout="horizontal"
           loadMore={loadMore}
           dataSource={list}
-          renderItem={(item) => (
-            <List.Item actions={[<Button onClick={setModalIsOpen} key="list-loadmore-edit">Правка</Button>]}>
-              <Skeleton avatar title={false} loading={item.loading} active>
-                <List.Item.Meta
-                  avatar={<Avatar src={item.picture.large} />}
-                  title={<a href="https://ant.design">{item.name?.last}</a>}
-                  description="Ant Design, a design language for background applications, is refined by Ant UED Team"
-                />
-                <div>content</div>
-              </Skeleton>
-            </List.Item>
-          )}
+          renderItem={renderItems}
         />
-        
-        <Modal title="Basic Modal" open={isModalOpen} onOk={function(){setModalIsOpen(); confirm()}} onCancel={function(){setModalIsOpen(); cancel()}}>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-      </Modal>
 
+        <Modal
+          title={`Изменение товара`}
+          open={isModalOpen}
+          onOk={function () {
+            setModalIsOpen();
+            confirm();
+          }}
+          onCancel={function () {
+            setModalIsOpen();
+            cancel();
+          }}
+        >
+            <UploadImg/>
+        </Modal>
       </div>
     </>
   );
