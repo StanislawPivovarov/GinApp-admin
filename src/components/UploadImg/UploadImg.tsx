@@ -4,7 +4,7 @@ import ImgCrop from "antd-img-crop";
 import type { RcFile, UploadFile, UploadProps } from "antd/es/upload/interface";
 
 const UploadImg: React.FC = () => {
-  const [fileList, setFileList] = useState<UploadFile>([]);
+  const [fileList, setFileList] = useState<UploadFile>();
 
 
   const onPreview = async (file: UploadFile) => {
@@ -16,10 +16,10 @@ const UploadImg: React.FC = () => {
         reader.onload = () => resolve(reader.result as string);
       });
     }
-    const image = new Image();
-    image.src = src;
-    const imgWindow = window.open(src);
-    imgWindow?.document.write(image.outerHTML);
+    // const image = new Image();
+    // image.src = src;
+    // const imgWindow = window.open(src);
+    // imgWindow?.document.write(image.outerHTML);
   };
 
   return (
