@@ -66,7 +66,7 @@ const ModalsContent = () => {
         </Footnote>
         <Divider />
         <Input placeholder="Название" style={{marginBottom: 20}}/>
-        <TextArea placeholder="Описание" style={{marginBottom: 20}} />
+        <Input placeholder="Описание" style={{marginBottom: 20}} />
         <Input prefix="₽" suffix="RUB" style={{marginBottom: 20}} />
       </div>
     </div>

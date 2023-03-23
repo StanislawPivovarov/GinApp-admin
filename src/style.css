@@ -6,3 +6,16 @@
 .ant-input-affix-wrapper sc-eyCcZC bACGtN css-dev-only-do-not-override-1me4733 {
     border-color: #4e4138 !important;
 }
+
+.ant-menu-title-content {
+    font-size: 18px;
+}
+
+:where(.css-dev-only-do-not-override-1me4733).ant-menu-light .ant-menu-submenu-selected >.ant-menu-submenu-title{
+    color: #4e4138;
+    font-weight: bold;
+}
+:where(.css-dev-only-do-not-override-1me4733).ant-menu-light .ant-menu-item-selected {
+    color: #4e4138;
+    background-color: #52443b5e;
+}

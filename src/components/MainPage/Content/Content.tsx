@@ -3,6 +3,7 @@ import { Avatar, Button, List, message, Modal, Skeleton } from "antd";
 import { EditOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import { useToggle } from "ahooks";
 import ModalsContent from "./ModalsContent";
+import ModalAdd from "./ModalAdd/ModalAdd";
 
 interface DataType {
   gender?: string;
@@ -32,6 +33,7 @@ const Content = () => {
   const [isModalOpen, { toggle: setModalOpen }] = useToggle(false);
   const [isDeclineOpen, { toggle: setDeclineOpen }] = useToggle(false);
   const [messageApi, contextHolder] = message.useMessage();
+  const [isAddOpen, { toggle: setAddOpen }] = useToggle(false);
 
   useEffect(() => {
     fetch(fakeDataUrl)
@@ -97,9 +99,9 @@ const Content = () => {
 
   return (
     <>
-    <Button type="primary" style={{marginBottom: 20,}}><PlusCircleOutlined /> Добавить новый товар</Button>
       <List
         className="demo-loadmore-list"
+        style={{ marginLeft: 20 }}
         loading={initLoading}
         itemLayout="horizontal"
         loadMore={loadMore}
@@ -121,7 +123,6 @@ const Content = () => {
             </Skeleton>
           </List.Item>
         )}
-        
       />
       <Modal
         title={"Изменить товар"}
@@ -131,8 +132,18 @@ const Content = () => {
         cancelText={"Отменить изменения"}
         okText={"Сохранить"}
       >
-        <ModalsContent/>
-        
+        <ModalsContent />
+      </Modal>
+
+      <Modal
+        title={"Изменить товар"}
+        open={isAddOpen}
+        onOk={setAddOpen}
+        onCancel={setAddOpen}
+        cancelText={"Отменить изменения"}
+        okText={"Добавить товар"}
+      >
+        <ModalAdd />
       </Modal>
     </>
   );
