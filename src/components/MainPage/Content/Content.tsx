@@ -4,6 +4,7 @@ import { EditOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import { useToggle } from "ahooks";
 import ModalsContent from "./ModalsContent";
 import ModalAdd from "./ModalAdd/ModalAdd";
+import { Person } from "./styles";
 
 interface DataType {
   gender?: string;
@@ -22,7 +23,7 @@ interface DataType {
   loading: boolean;
 }
 
-const count = 10;
+const count = 5;
 const fakeDataUrl = `https://randomuser.me/api/?results=${count}&inc=name,gender,email,nat,picture&noinfo`;
 
 const Content = () => {
@@ -116,7 +117,7 @@ const Content = () => {
           >
             <Skeleton avatar title={false} loading={item.loading} active>
               <List.Item.Meta
-                avatar={<Avatar src={item.picture.large} />}
+                avatar={<Person src={item.picture.large} />}
                 title={<a href="https://ant.design">{item.name?.last}</a>}
                 description="Ant Design, a design language for background applications, is refined by Ant UED Team"
               />
