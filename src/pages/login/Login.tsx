@@ -1,6 +1,5 @@
-import React from "react";
+import React, { ReactElement } from "react";
 import {
-  Content,
   HeaderText,
   InputField,
   Key,
@@ -12,17 +11,16 @@ import {
   Person,
   Right,
 } from "./styles";
-import { Col, Divider, Input, Row } from "antd";
-import { UserOutlined } from "@ant-design/icons";
-import Logo from "@/components/Images/Logo";
 import { Comfortaa } from "next/font/google";
+import StartPage from "@/layouts/StartPage";
+import { NextPageWithLayout } from "../_app";
 
 const comfortaa = Comfortaa({
   weight: "400",
   subsets: ["latin"],
 });
 
-const Login = () => {
+const Login: NextPageWithLayout  = () => {
   return (
     <Main>
       <Left>
@@ -36,9 +34,17 @@ const Login = () => {
         <InputField prefix={<Person />} placeholder="Ваш логин" />
         <InputField prefix={<Key />} placeholder="Ваш пароль" type="password" />
         <LoginButton className={comfortaa.className}>Войти</LoginButton>
-      </Right>
+      </Right> 
     </Main>
   );
 };
+
+Login.getLayout = function getLayout(page: ReactElement) {
+  return(
+    <StartPage>
+      {page}
+    </StartPage>
+  )
+}
 
 export default Login;

@@ -1,11 +1,20 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import { Ubuntu_Condensed } from 'next/font/google'
-import Login from './login'
-import Admin from './admin'
+import Head from "next/head";
+import Image from "next/image";
+import { Ubuntu_Condensed } from "next/font/google";
+import Login from "./login";
+import { BrowserRouter } from "react-router-dom";
+
+import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
+import Admin from "./admin";
+import Beans from "./beans";
+
+const client = new ApolloClient({
+  uri: `${process.env.ENTRY_POINT}`,
+  cache: new InMemoryCache(),
+});
 
 export default function Home() {
   return (
-    <Admin/>
-  )
+      <Admin />
+  );
 }
