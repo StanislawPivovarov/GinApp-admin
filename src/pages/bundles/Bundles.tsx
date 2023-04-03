@@ -4,7 +4,7 @@ import { NextPageWithLayout } from "../_app";
 
 const Bundles: NextPageWithLayout = () => {
     return(
-        <h2>Наборы</h2>
+        <h2 className="header-inner">Наборы</h2>
     )
 }
 

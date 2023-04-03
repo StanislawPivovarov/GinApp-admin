@@ -4,7 +4,7 @@ import { NextPageWithLayout } from "../_app";
 
 const Coffee: NextPageWithLayout = () => {
     return(
-        <h2>Готовый кофе</h2>
+        <h2 className="header-inner">Готовый кофе</h2>
     )
 }
 

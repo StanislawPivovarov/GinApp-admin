@@ -4,7 +4,7 @@ import { NextPageWithLayout } from "../_app";
 
 const Notifications: NextPageWithLayout = () => {
     return(
-        <h2>Рассылки</h2>
+        <h2 className="header-inner">Рассылки</h2>
     )
 }
 

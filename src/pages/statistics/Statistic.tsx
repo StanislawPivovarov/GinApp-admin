@@ -4,7 +4,7 @@ import { NextPageWithLayout } from "../_app";
 
 const Statistic: NextPageWithLayout = () => {
     return(
-        <h2>Статистика</h2>
+        <h2 className="header-inner">Статистика</h2>
     )
 }
 

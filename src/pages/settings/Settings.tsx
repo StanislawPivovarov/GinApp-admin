@@ -4,7 +4,7 @@ import { NextPageWithLayout } from "../_app";
 
 const Settings: NextPageWithLayout = () => {
     return(
-        <h2>Настройки</h2>
+        <h2 className="header-inner">Настройки</h2>
     )
 }
 

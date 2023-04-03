@@ -4,7 +4,7 @@ import { NextPageWithLayout } from "../_app";
 
 const Beans: NextPageWithLayout = () => {
     return(
-        <h2>Кофейные зерна</h2>
+        <h2 className="header-inner">Кофейные зерна</h2>
     )
 }
 

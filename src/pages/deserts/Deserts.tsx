@@ -4,7 +4,7 @@ import { NextPageWithLayout } from "../_app";
 
 const Deserts: NextPageWithLayout = () => {
     return(
-        <h2>Десерты</h2>
+        <h2 className="header-inner">Десерты</h2>
     )
 }
 
