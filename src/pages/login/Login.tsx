@@ -10,7 +10,7 @@ import {
   Main,
   Person,
   Right,
-} from "./styles";
+} from "../../styles/login/styles";
 import { Comfortaa } from "next/font/google";
 import StartPage from "@/layouts/StartPage";
 import { NextPageWithLayout } from "../_app";

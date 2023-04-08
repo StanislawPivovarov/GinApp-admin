@@ -1,26 +1,52 @@
 * {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 .ant-input-affix-wrapper sc-eyCcZC bACGtN css-dev-only-do-not-override-1me4733 {
-    border-color: #4e4138 !important;
+  border-color: #4e4138 !important;
 }
 
 .ant-menu-title-content {
-    font-size: 14px;
+  font-size: 14px;
 }
 
-:where(.css-dev-only-do-not-override-1me4733).ant-menu-light .ant-menu-submenu-selected >.ant-menu-submenu-title{
-    color: #4e4138;
-    font-weight: bold;
+:where(.css-dev-only-do-not-override-1me4733).ant-menu-light
+  .ant-menu-submenu-selected
+  > .ant-menu-submenu-title {
+  color: #4e4138;
+  font-weight: bold;
 }
-:where(.css-dev-only-do-not-override-1me4733).ant-menu-light .ant-menu-item-selected {
-    color: #4e4138;
-    background-color: #52443b5e;
+:where(.css-dev-only-do-not-override-1me4733).ant-menu-light
+  .ant-menu-item-selected {
+  color: #4e4138;
+  background-color: #52443b5e;
 }
 
-.header-inner{
-    font-size: 36px;
-    margin-left: 20px;
+.header-inner {
+  font-size: 36px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+:where(
+    .css-dev-only-do-not-override-1me4733
+  ).ant-menu-light.ant-menu-root.ant-menu-inline,
+:where(
+    .css-dev-only-do-not-override-1me4733
+  ).ant-menu-light.ant-menu-root.ant-menu-vertical {
+  border: none;
+}
+
+:where(.css-dev-only-do-not-override-1me4733).ant-btn-primary {
+    background-color: #5B6460 !important;
+}
+:where(.css-dev-only-do-not-override-1me4733).ant-btn-default:not(:disabled):active {
+    color: #5B6460;
+    border-color: #5B6460;
+}
+
+:where(.css-dev-only-do-not-override-1me4733).ant-btn-default:not(:disabled):hover {
+    color: #5B6460;
+    border-color: #5B6460;
 }

@@ -4,10 +4,8 @@ import AdminPage from "@/layouts/AdminPage";
 import StartPage from "@/layouts/StartPage";
 import { ReactElement, ReactNode } from "react";
 import type { NextPage } from 'next'
-const layouts: any = {
-  LA: AdminPage,
-  LS: StartPage,
-};
+
+import { ApolloClient, ApolloProvider, InMemoryCache, createHttpLink } from "@apollo/react-hooks";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode
@@ -17,9 +15,22 @@ type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout
 }
 
+const client = new ApolloClient({
+  uri: `${process.env.ENTRY_POINT}`,
+  cache: new InMemoryCache(),
+});
+
+
 export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page) => page)
 
-  return getLayout(<Component {...pageProps} />)
+  return (
+    <ApolloProvider client={client}>
+        {getLayout(<Component {...pageProps} />)}
+    </ApolloProvider>
+   
+  )
+  
+
 }
 

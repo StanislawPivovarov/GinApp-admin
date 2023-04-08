@@ -51,6 +51,8 @@ const items: MenuProps["items"] = [
     getItem("Десерты", "/deserts"),
     getItem("Аксессуары", "/accessories"),
     getItem("Наборы", "/bundles"),
+    { type: 'divider' },
+    getItem("Категории", "/categories"),
   ]),
   getItem("Приложение", "sub2", <MdAppShortcut />, [
     getItem("Рассылки", "/notifications"),
