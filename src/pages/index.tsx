@@ -9,6 +9,7 @@ import Admin from "./admin";
 import Beans from "./beans";
 import Statistic from "./statistics";
 import AdminPage from "@/layouts/AdminPage";
+import StartPage from "@/layouts/StartPage";
 
 const client = new ApolloClient({
   uri: `${process.env.ENTRY_POINT}`,
@@ -17,8 +18,9 @@ const client = new ApolloClient({
 
 export default function Home() {
   return (
-      <AdminPage>
+       <AdminPage>
         <Statistic/>
-      </AdminPage>
+     </AdminPage>
+
   );
 }

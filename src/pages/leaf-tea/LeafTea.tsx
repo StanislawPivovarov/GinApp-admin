@@ -5,6 +5,17 @@ import { AddButton, ButtonText } from "@/styles/global";
 import { PlusCircleOutlined } from "@ant-design/icons";
 import { Row, Col, Modal, Avatar, List } from "antd";
 import { success, fail } from "@/helpers/notifications";
+import type { GetServerSideProps } from "next";
+import request, { GraphQLClient, gql } from "graphql-request";
+import {
+  ApolloClient,
+  ApolloProvider,
+  InMemoryCache,
+  useQuery,
+} from "@apollo/client";
+import { CATEGORIES } from "@/graphql/queries";
+import { client } from "@/graphql/client";
+import ListItem from "@/components/ListItem";
 
 const LeafTea: NextPageWithLayout = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -21,75 +32,62 @@ const LeafTea: NextPageWithLayout = () => {
     setIsModalOpen(false);
   };
 
-  const data = [
-    {
-      title: "Кофе 1",
-    },
-    {
-      title: "Кофе 2",
-    },
-    {
-      title: "Кофе 3",
-    },
-    {
-      title: "Кофе 4",
-    },
-  ];
+  const { data, loading } = useQuery(CATEGORIES);
+
+  console.log({ data });
 
   return (
-    <Row justify={"center"}>
-      <Col span={23}>
-        <div>
-          <h2 className="header-inner">Листовой чай</h2>
-          <AddButton>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <PlusCircleOutlined style={{ marginRight: 10, fontSize: 15 }} />
-              <ButtonText onClick={showModal}>Добавить чай</ButtonText>
+    <ApolloProvider {...{ client }}>
+      <Row justify={"center"}>
+        <Col span={23}>
+          <div>
+            <h2 className="header-inner">Листовой чай</h2>
+            <AddButton>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <PlusCircleOutlined style={{ marginRight: 10, fontSize: 15 }} />
+                <ButtonText onClick={showModal}>Добавить чай</ButtonText>
+              </div>
+            </AddButton>
+          </div>
+          <Modal
+            title="Добавить чай"
+            open={isModalOpen}
+            onOk={() => {
+              handleOk(), success();
+            }}
+            okText={"Сохранить"}
+            cancelText={"Отменить"}
+            onCancel={() => {
+              handleCancel(), fail();
+            }}
+          >
+            <p>Some contents...</p>
+            <p>Some contents...</p>
+            <p>Some contents...</p>
+          </Modal>
+          {data?.category.map((category: any) => (
+            <div key={category.id}>
+              <ListItem
+               name={category.name}
+               description={category.description}
+               image={category.image}
+               price={200}
+               category={"ghbfffffffffkffkfkfkffkfkkfkfkfdtn"}
+               />
             </div>
-          </AddButton>
-        </div>
-        <Modal
-          title="Добавить чай"
-          open={isModalOpen}
-          onOk={() => {
-            handleOk(), success();
-          }}
-          okText={"Сохранить"}
-          cancelText={"Отменить"}
-          onCancel={() => {
-            handleCancel(), fail();
-          }}
-        >
-          <p>Some contents...</p>
-          <p>Some contents...</p>
-          <p>Some contents...</p>
-        </Modal>
-        <List
-          itemLayout="horizontal"
-          dataSource={data}
-          renderItem={(item, index) => (
-            <List.Item actions={[<a key="list-loadmore-edit">Изменить</a>]}>
-              <List.Item.Meta
-                avatar={
-                  <Avatar
-                    src={`https://joesch.moe/api/v1/random?key=${index}`}
-                  />
-                }
-                title={<a href="https://ant.design">{item.title}</a>}
-                description="Ant Design, a design language for background applications, is refined by Ant UED Team"
-              />
-            </List.Item>
-          )}
-        />
-      </Col>
-    </Row>
+          ))}
+
+          
+        </Col>
+      </Row>
+    </ApolloProvider>
   );
 };
 

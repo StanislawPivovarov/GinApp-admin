@@ -14,6 +14,7 @@ import {
 import { Comfortaa } from "next/font/google";
 import StartPage from "@/layouts/StartPage";
 import { NextPageWithLayout } from "../_app";
+import { useRouter } from "next/router";
 
 const comfortaa = Comfortaa({
   weight: "400",

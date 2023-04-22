@@ -6,9 +6,10 @@ import { PlusCircleOutlined } from "@ant-design/icons";
 import { Row, Col, Modal, Avatar, List, Table, Typography } from "antd";
 import { success, fail } from "@/helpers/notifications";
 import { useQuery } from "@apollo/client";
-import { GET_TEA } from "@/queries/queries";
+// import { GET_TEA } from "@/queries/queries";
 import type { ColumnsType } from "antd/es/table";
 import Image from "next/image";
+import ModalContent from "@/components/ModalContent";
 
 const Tea: NextPageWithLayout = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -67,7 +68,7 @@ const Tea: NextPageWithLayout = () => {
             </div>
           </AddButton>
           <Modal
-            title="Добавить набор"
+            title="Добавить готовый чай"
             open={isModalOpen}
             onOk={() => {
               handleOk(), success();
@@ -78,9 +79,7 @@ const Tea: NextPageWithLayout = () => {
               handleCancel(), fail();
             }}
           >
-            <p>Some contents...</p>
-            <p>Some contents...</p>
-            <p>Some contents...</p>
+            <ModalContent/>
           </Modal>
         </div>
 
