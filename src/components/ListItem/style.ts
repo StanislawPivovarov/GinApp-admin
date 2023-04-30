@@ -37,7 +37,8 @@ export const Description = styled.p`
 export const Info = styled.div`
 display: flex;
 flex-direction: column;
-width: 150px
+width: 150px;
+margin: 0 auto;
 `;
 
 export const Category = styled.p`

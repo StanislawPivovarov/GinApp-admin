@@ -4,25 +4,28 @@ import { NextPageWithLayout } from "../_app";
 import { success, fail } from "@/helpers/notifications";
 import { AddButton, ButtonText } from "@/styles/global";
 import { PlusCircleOutlined } from "@ant-design/icons";
-import { Row, Col, Modal, Avatar, List } from "antd";
+import { Row, Col, Modal, Avatar, List, Form, Input, Select } from "antd";
+import { ACCESSORIES, CATEGORIES } from "@/graphql/queries";
+import { useMutation, useQuery } from "@apollo/client";
+import ListItem from "@/components/ListItem";
+import form from "antd/es/form";
+import { Hosting } from "../deserts/styles";
+import { INSERT_ACCESSORIES, INSERT_DESERT } from "@/graphql/mutations";
+import logoanim from '../../assets/logo-animated.svg'
+import { Loader } from "@/styles/login/styles";
 
 const Accessories: NextPageWithLayout = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isInstructionOpen, setInstructionOpen] = useState(false);
+  const [form] = Form.useForm();
 
-  const data = [
-    {
-      title: "Чайник 1",
-    },
-    {
-      title: "Чайник 2",
-    },
-    {
-      title: "Чайник 3",
-    },
-    {
-      title: "Чайник 4",
-    },
-  ];
+  const showInstruction = () => {
+    setInstructionOpen(true);
+  };
+
+  const closeManual = () => {
+    setInstructionOpen(false);
+  };
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -36,6 +39,35 @@ const Accessories: NextPageWithLayout = () => {
     setIsModalOpen(false);
   };
 
+  const onSave = (values: any) => {
+    console.log(values);
+ 
+    addAccess(
+     { variables: {
+        acc: {
+          price: values.price,
+          name: values.name,
+          id: values.id,
+          description: values.description,
+          category: values.category,
+          image: values.image
+        }
+      },}
+    );
+  };
+  const { data, loading } = useQuery(ACCESSORIES);
+  const { data: category } = useQuery(CATEGORIES);
+
+  const [addAccess, { data: mut, loading: loadmut, error: errmut }] =
+    useMutation(INSERT_ACCESSORIES, {
+      refetchQueries: [{ query: ACCESSORIES }, "ACCESSUARIES"],
+    });
+
+    if(loading) {
+      return (
+        <Loader style={{margin: "0 auto", display: 'flex'}} src={logoanim} alt=""/>
+      )
+    }
   return (
     <Row justify={"center"}>
       <Col span={23}>
@@ -59,6 +91,7 @@ const Accessories: NextPageWithLayout = () => {
           title="Добавить аксессуары"
           open={isModalOpen}
           onOk={() => {
+            form.submit(),
             handleOk(), success();
           }}
           okText={"Сохранить"}
@@ -67,28 +100,57 @@ const Accessories: NextPageWithLayout = () => {
             handleCancel(), fail();
           }}
         >
-          <p>Some contents...</p>
-          <p>Some contents...</p>
-          <p>Some contents...</p>
+          <Hosting type="link">Хостинг для загрузки</Hosting>
+          <Hosting type="link" onClick={showInstruction}>
+            Инстркуция
+          </Hosting>
+
+          <Form form={form} onFinish={(formdata) => onSave(formdata)}>
+            <Form.Item name="image">
+              {/* <ImageUpload /> */}
+              <Input placeholder="URL изображения" required />
+            </Form.Item>
+
+            <Form.Item name="name" required style={{ marginRight: "20px" }}>
+              <Input placeholder="Название" required />
+            </Form.Item>
+            <Form.Item
+              name="description"
+              required
+              style={{ marginRight: "20px" }}
+            >
+              <Input placeholder="Описание" required />
+            </Form.Item>
+            <Form.Item
+              name="category"
+              required
+              style={{ width: "300px", marginRight: "20px" }}
+            >
+              <Select>
+                {category?.category.map((category: any) => (
+                  <Select.Option value={category.id}>
+                    {category.name}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item name="price" required style={{ marginRight: "20px" }}>
+              <Input placeholder="Цена" suffix="₽" />
+            </Form.Item>
+          </Form>
         </Modal>
 
-        <List
-          itemLayout="horizontal"
-          dataSource={data}
-          renderItem={(item, index) => (
-            <List.Item actions={[<a key="list-loadmore-edit">Изменить</a>]}>
-              <List.Item.Meta
-                avatar={
-                  <Avatar
-                    src={`https://joesch.moe/api/v1/random?key=${index}`}
-                  />
-                }
-                title={<a href="https://ant.design">{item.title}</a>}
-                description="Ant Design, a design language for background applications, is refined by Ant UED Team"
-              />
-            </List.Item>
-          )}
-        />
+        {data?.accessories.map((accessories: any) => (
+          <div key={accessories.id}>
+            <ListItem
+              name={accessories.name}
+              description={accessories.description}
+              image={accessories.image}
+              price={accessories.price}
+              category={accessories.category}
+            />
+          </div>
+        ))}
       </Col>
     </Row>
   );

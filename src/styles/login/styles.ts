@@ -93,3 +93,16 @@ color: #4e4138;
   margin-bottom: 20px;
 }
 `
+
+export const Loader = styled(Image)`
+animation-name: breath-animation;
+animation-duration: 3s;
+animation-iteration-count: infinite;
+}
+@keyframes breath-animation {
+0% { height: 100px; width: 100px; }
+30% { height: 200px; width: 200px; opacity: 0.5 }
+40% { height: 205px; width: 205px; opacity: 0.3; }
+100% { height: 100px; width: 100px; opacity: 0.6; }
+}
+`

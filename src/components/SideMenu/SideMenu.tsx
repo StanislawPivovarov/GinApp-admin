@@ -8,7 +8,7 @@ import logo from "../../assets/logo.svg";
 import { LogoSide, MenuWrapper } from "./style";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import Admin from "@/pages/admin";
-import LeafTea from "@/pages/leaf-tea";
+import LeafTea from "@/pages/products";
 import Tea from "@/pages/tea";
 import Beans from "@/pages/beans";
 import Coffee from "@/pages/coffee";
@@ -39,21 +39,8 @@ function getItem(
 
 const items: MenuProps["items"] = [
   getItem("Статистика", "/statistics"),
-  getItem("Товары", "sub1", <CgCoffee />, [
-    getItem("Чай", "g1", null, [
-      getItem("Листовой чай", "/leaf-tea"),
-      getItem("Готовый чай", "/tea"),
-    ]),
-    getItem("Кофе", "g2", null, [
-      getItem("Зерна", "/beans"),
-      getItem("Готовый кофе", "/coffee"),
-    ]),
-    getItem("Десерты", "/deserts"),
-    getItem("Аксессуары", "/accessories"),
-    getItem("Наборы", "/bundles"),
-    { type: 'divider' },
-    getItem("Категории", "/categories"),
-  ]),
+  getItem("Товары", "/products", <CgCoffee />),
+  getItem("Категории", "/categories" ),
   getItem("Приложение", "sub2", <MdAppShortcut />, [
     getItem("Рассылки", "/notifications"),
     getItem("Настройки", "/settings"),

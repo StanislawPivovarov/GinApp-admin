@@ -64,8 +64,8 @@ export const COFFEE = gql`
 `;
 
 export const DESERTS = gql`
-query {
-    deserts(order_by: {id: desc}) {
+  query {
+    deserts(order_by: { id: desc }) {
       price
       name
       image
@@ -73,12 +73,12 @@ query {
       description
       category
     }
-  }  
+  }
 `;
 
 export const LEAF_TEA = gql`
-query {
-    leaf_tea(order_by: {id: desc}) {
+  query {
+    leaf_tea(order_by: { id: desc }) {
       price
       name
       image
@@ -86,12 +86,12 @@ query {
       description
       category
     }
-  }  
+  }
 `;
 
 export const TEA = gql`
-query {
-    tea(order_by: {id: desc}) {
+  query {
+    tea(order_by: { id: desc }) {
       category
       description
       id
@@ -101,3 +101,20 @@ query {
     }
   }
 `;
+
+export const PRODUCTS = gql`
+query {
+  product {
+    product_category {
+      id
+      name
+    }
+    description
+    id
+    name
+    price
+    image
+  }
+}
+
+`

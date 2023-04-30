@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['cdn-icons-png.flaticon.com', '17.img.avito.st']
+    domains: ['cdn-icons-png.flaticon.com', '17.img.avito.st', 'www.teaelite.ru', 'i.postimg.cc']
   },
   env: {
     HASURA_ENDPOINT: process.env.HASURA_ENDPOINT,
