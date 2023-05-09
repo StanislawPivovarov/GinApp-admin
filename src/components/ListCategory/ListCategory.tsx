@@ -8,9 +8,15 @@ interface categoryProps {
   name: String;
   description: String;
   image: String;
+  onClick: MouseEventHandler;
 //   edit: MouseEventHandler;
 //   delete: MouseEventHandler;
 }
+
+const onDelete = (values: any) => {
+  console.log(values.id);
+}
+
 
 const ListCategory = (props: categoryProps) => {
   return (
@@ -24,7 +30,7 @@ const ListCategory = (props: categoryProps) => {
         <Button type="link">
           <EditOutlined /> Изменить
         </Button>
-        <Button type="link">
+        <Button onClick={props.onClick} type="link">
           <DeleteOutlined /> Удалить
         </Button>
       </div>

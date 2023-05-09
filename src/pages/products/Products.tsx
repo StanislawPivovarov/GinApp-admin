@@ -3,22 +3,31 @@ import React, { ReactElement, useState } from "react";
 import { NextPageWithLayout } from "../_app";
 import { AddButton, ButtonText } from "@/styles/global";
 import { PlusCircleOutlined } from "@ant-design/icons";
-import { Row, Col, Modal, Avatar, List, Form, Input, Select } from "antd";
+import {
+  Row,
+  Col,
+  Modal,
+  Avatar,
+  List,
+  Form,
+  Input,
+  Select,
+  Button,
+} from "antd";
 import { success, fail } from "@/helpers/notifications";
 import type { GetServerSideProps } from "next";
 import request, { GraphQLClient, gql } from "graphql-request";
 import { useMutation, useQuery } from "@apollo/client";
 import { CATEGORIES, COFFEE, LEAF_TEA, PRODUCTS } from "@/graphql/queries";
 import ListItem from "@/components/ListItem";
-import ModalContent from "@/components/ModalContent";
-import { INSERT_LEAF_TEA, INSERT_PRODUCT } from "@/graphql/mutations";
+import { INSERT_PRODUCT, REMOVE_PRODUCT } from "@/graphql/mutations";
 import ModalInstructuion from "@/components/ModalInstruction";
-import { Hosting } from "../deserts/styles";
 import logoanim from "../../assets/logo-animated.svg";
 import { Loader } from "@/styles/login/styles";
 
 const Products: NextPageWithLayout = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isUpdateOpen, setIsUpdateOpen] = useState(false);
   const [form] = Form.useForm();
   const [isInstructionOpen, setInstructionOpen] = useState(false);
 
@@ -44,6 +53,15 @@ const Products: NextPageWithLayout = () => {
     form.resetFields();
   };
 
+  const showUpdate = (values: any) => {
+    setIsUpdateOpen(true);
+    console.log(values);
+  };
+
+  const closeUpdate = () => {
+    setIsUpdateOpen(false);
+  };
+
   const { data, loading } = useQuery(PRODUCTS);
   const { data: category }: any = useQuery(CATEGORIES);
   console.log({ data });
@@ -52,7 +70,24 @@ const Products: NextPageWithLayout = () => {
     useMutation(INSERT_PRODUCT, {
       refetchQueries: [{ query: PRODUCTS }, "GET_PRODUCTS"],
     });
-  if (loading) {
+
+  const [removeProduct, { data: rm, loading: rmload }] = useMutation(
+    REMOVE_PRODUCT,
+    {
+      refetchQueries: [{ query: PRODUCTS }, "GET_PRODUCTS"],
+    }
+  );
+
+  const onDelete = (values: any) => {
+    console.log(values);
+    removeProduct({
+      variables: {
+        product: values,
+      },
+    });
+  };
+
+  if (loading || loadmut || rmload) {
     return (
       <Loader
         style={{ margin: "0 auto", display: "flex" }}
@@ -108,10 +143,12 @@ const Products: NextPageWithLayout = () => {
             handleCancel(), fail();
           }}
         >
-          <Hosting type="link" href="http://postimages.org" target="blank">Хостинг для загрузки</Hosting>
-          <Hosting type="link" onClick={showInstruction}>
+          <Button type="link" href="http://postimages.org" target="blank">
+            Хостинг для загрузки
+          </Button>
+          <Button type="link" onClick={showInstruction}>
             Инстркуция
-          </Hosting>
+          </Button>
 
           <Form form={form} onFinish={(formdata) => onSave(formdata)}>
             <Form.Item name="image">
@@ -156,6 +193,57 @@ const Products: NextPageWithLayout = () => {
         >
           <ModalInstructuion />
         </Modal>
+        <Modal
+          title="Обновить продкут"
+          open={isUpdateOpen}
+          onOk={() => {
+            form.submit(), handleOk(), success();
+          }}
+          okText={"Сохранить"}
+          cancelText={"Отменить"}
+          onCancel={() => {
+            handleCancel(), fail();
+          }}
+        >
+          <Form form={form} onFinish={(formdata) => onSave(formdata)}>
+            <Form.Item name="image">
+              {/* <ImageUpload /> */}
+              <Input placeholder="URL изображения" required />
+            </Form.Item>
+
+            <Form.Item
+              requiredMark
+              name="name"
+              required
+              style={{ marginRight: "20px" }}
+            >
+              <Input placeholder="Название" required />
+            </Form.Item>
+            <Form.Item
+              name="description"
+              required
+              style={{ marginRight: "20px" }}
+            >
+              <Input placeholder="Описание" required />
+            </Form.Item>
+            <Form.Item
+              name="category"
+              required
+              style={{ width: "300px", marginRight: "20px" }}
+            >
+              <Select>
+                {category?.category.map((category: any) => (
+                  <Select.Option value={category.id}>
+                    {category.name}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item name="price" required style={{ marginRight: "20px" }}>
+              <Input placeholder="Цена" suffix="₽" />
+            </Form.Item>
+          </Form>
+        </Modal>
         {data?.product.map((product: any) => (
           <div key={product.id}>
             <ListItem
@@ -164,6 +252,7 @@ const Products: NextPageWithLayout = () => {
               image={product.image}
               price={product.price}
               category={product.product_category.name}
+              onClick={() => onDelete(product.id)}
             />
           </div>
         ))}

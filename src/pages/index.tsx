@@ -6,7 +6,6 @@ import { BrowserRouter } from "react-router-dom";
 
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import Admin from "./admin";
-import Beans from "./beans";
 import Statistic from "./statistics";
 import AdminPage from "@/layouts/AdminPage";
 import StartPage from "@/layouts/StartPage";
@@ -24,3 +23,4 @@ export default function Home() {
 
   );
 }
+ 

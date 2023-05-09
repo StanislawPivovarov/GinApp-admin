@@ -10,6 +10,7 @@ interface ListProps {
   price: any;
   description: any;
   category: String;
+  onClick: MouseEventHandler;
 //   change: MouseEventHandler;
 //   delete: MouseEventHandler;
 }
@@ -28,7 +29,7 @@ const ListItem = (props: ListProps) => {
       </Info>
       <div>
         <Button type="link"><EditOutlined /> Изменить</Button>
-        <Button type="link"><DeleteOutlined /> Удалить</Button>
+        <Button type="link" onClick={props.onClick}><DeleteOutlined /> Удалить</Button>
       </div>
     </Wrapper>
   );

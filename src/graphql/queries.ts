@@ -103,18 +103,63 @@ export const TEA = gql`
 `;
 
 export const PRODUCTS = gql`
-query {
-  product {
-    product_category {
+  query {
+    product(order_by: { id: desc }) {
+      product_category {
+        id
+        name
+      }
+      description
       id
       name
+      price
+      image
     }
-    description
-    id
-    name
-    price
-    image
   }
-}
+`;
+export const BLOGS = gql`
+  query {
+    blog(order_by: { created: desc }) {
+      name
+      image
+      id
+      filling
+      created
+    }
+  }
+`;
 
-`
+export const CAROUSEL_ACTIVE = gql`
+  query {
+    carousel (where: {carouselCategory: {category: {_eq: "Активирован"}}})  {
+      carouselCategory {
+        category
+        id
+      }
+      id
+      image
+    }
+  }
+`;
+
+export const CAROUSEL_ARCHIVE = gql`
+  query {
+    carousel (where: {carouselCategory: {category: {_eq: "Отключен"}}})  {
+      carouselCategory {
+        category
+        id
+      }
+      id
+      image
+    }
+  }
+`;
+
+export const CAROUSEL_CATEGORY = gql`
+  query {
+    carouselCategory {
+      category
+      id
+    }
+  }
+`;

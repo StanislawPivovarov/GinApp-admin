@@ -3,17 +3,16 @@ import React, { ReactElement, useState } from "react";
 import { NextPageWithLayout } from "../_app";
 import { AddButton, ButtonText } from "@/styles/global";
 import { PlusCircleOutlined } from "@ant-design/icons";
-import { Col, Form, Input, Modal, Row } from "antd";
+import { Button, Col, Form, Input, Modal, Row } from "antd";
 import { CATEGORIES } from "@/graphql/queries";
 import { useMutation, useQuery } from "@apollo/client";
 import ListCategory from "@/components/ListCategory";
-import { INSERT_CATEGORY } from "@/graphql/mutations";
+import { INSERT_CATEGORY, REMOVE_CATEGORY } from "@/graphql/mutations";
 import ModalInstructuion from "@/components/ModalInstruction";
 import { success } from "@/helpers/notifications";
-import { fail } from "assert";
-import { Hosting } from "../deserts/styles";
+import { fail } from "@/helpers/notifications";
 import { Loader } from "@/styles/login/styles";
-import logoanim from '../../assets/logo-animated.svg'
+import logoanim from "../../assets/logo-animated.svg";
 
 const Categories: NextPageWithLayout = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -35,7 +34,14 @@ const Categories: NextPageWithLayout = () => {
     });
   };
 
-  
+  const onDelete = (values: any) => {
+    console.log(values);
+    removeCategory({
+      variables: {
+        item: values,
+      },
+    });
+  };
 
   const showInstruction = () => {
     setInstructionOpen(true);
@@ -64,11 +70,22 @@ const Categories: NextPageWithLayout = () => {
     useMutation(INSERT_CATEGORY, {
       refetchQueries: [{ query: CATEGORIES }, "GET_DESERTS"],
     });
-    if(loading) {
-      return (
-        <Loader style={{margin: "0 auto", display: 'flex'}} src={logoanim} alt=""/>
-      )
+  const [removeCategory, { data: rm, loading: rmload }] = useMutation(
+    REMOVE_CATEGORY,
+    {
+      refetchQueries: [{ query: CATEGORIES }, "GET_CATEGORIES"],
     }
+  );
+  if (loading || loadmut || rmload) {
+    return (
+      <Loader
+        style={{ margin: "0 auto", display: "flex" }}
+        src={logoanim}
+        alt=""
+      />
+    );
+  }
+
   return (
     <Row justify={"center"}>
       <Col span={23}>
@@ -92,42 +109,47 @@ const Categories: NextPageWithLayout = () => {
           title="Добавить набор"
           open={isModalOpen}
           onOk={() => {
-            form.submit(),
-            handleOk(),
-            success()
+            form.submit(), handleOk(), success();
           }}
           okText={"Сохранить"}
           cancelText={"Отменить"}
           onCancel={() => {
             handleCancel(), fail();
           }}
-          
         >
-          <Hosting type="link" href="http://postimages.org" target="blank">Хостинг для загрузки</Hosting>
-          <Hosting type="link" onClick={showInstruction}>Инстркуция</Hosting>
+          <Button type="link" href="http://postimages.org" target="blank">
+            Хостинг для загрузки
+          </Button>
+          <Button type="link" onClick={showInstruction}>
+            Инстркуция
+          </Button>
 
           <Form form={form} onFinish={(formdata) => onSave(formdata)}>
             <Form.Item name="image">
               {/* <ImageUpload /> */}
-              <Input  placeholder="URL изображения" required />
+              <Input placeholder="URL изображения" required />
             </Form.Item>
-            
+
             <Form.Item name="name" required style={{ marginRight: "20px" }}>
               <Input placeholder="Название" required />
             </Form.Item>
-            <Form.Item name="description" required style={{ marginRight: "20px" }}>
+            <Form.Item
+              name="description"
+              required
+              style={{ marginRight: "20px" }}
+            >
               <Input placeholder="Описание" required />
             </Form.Item>
           </Form>
         </Modal>
         <Modal
-        footer={null}
-        closable
-        onCancel={closeManual}
-        open={isInstructionOpen}
-        width={1000}
+          footer={null}
+          closable
+          onCancel={closeManual}
+          open={isInstructionOpen}
+          width={1000}
         >
-          <ModalInstructuion/>
+          <ModalInstructuion />
         </Modal>
         {data?.category.map((category: any) => (
           <div key={category.id}>
@@ -135,6 +157,7 @@ const Categories: NextPageWithLayout = () => {
               name={category.name}
               description={category.description}
               image={category.image}
+              onClick={() => onDelete(category.id)}
             />
           </div>
         ))}
