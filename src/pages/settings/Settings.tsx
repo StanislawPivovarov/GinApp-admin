@@ -16,7 +16,7 @@ import {
 } from "@/graphql/queries";
 import logoanim from "../../assets/logo-animated.svg";
 import { Loader } from "@/styles/login/styles";
-import { Grid } from "./style";
+import { Grid } from "../../styles/settings/style";
 import { ADD_CAROUSEL, REMOVE_CAROUSEL } from "@/graphql/mutations";
 
 const Settings: NextPageWithLayout = () => {
