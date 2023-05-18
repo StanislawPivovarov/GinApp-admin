@@ -64,8 +64,8 @@ const Settings: NextPageWithLayout = () => {
     console.log(values);
     removeCarousel({
       variables: {
-          item: values
-        },
+        item: values,
+      },
     });
   };
 

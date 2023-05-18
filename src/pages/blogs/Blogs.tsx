@@ -16,11 +16,13 @@ import { useQuery, useMutation } from "@apollo/client";
 import { Row, Col, Modal, Button, Form, Input, Select } from "antd";
 import form from "antd/es/form";
 import { fail } from "@/helpers/notifications";
-import React, { ReactElement, useState } from "react";
+import React, { ReactElement, useEffect, useState } from "react";
 import logoanim from "../../assets/logo-animated.svg";
 import AdminPage from "@/layouts/AdminPage";
 import { NextPageWithLayout } from "../_app";
 import BlogList from "@/components/BlogList";
+import { CgDisplaySpacing, CgLayoutGrid } from "react-icons/cg";
+import PrivateRoute from "@/auth/PrivateRouter";
 
 const Blogs: NextPageWithLayout = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -29,6 +31,14 @@ const Blogs: NextPageWithLayout = () => {
   const [isInstructionOpen, setInstructionOpen] = useState(false);
   const { TextArea } = Input;
 
+  
+  const [datas, setDatas] = useState({id: '', name: "", filling: '', image: ''});
+  useEffect(() => {
+    form.setFieldsValue(datas)
+   }, [form, datas])
+   
+  
+console.log('QWE', datas)
   const showInstruction = () => {
     setInstructionOpen(true);
   };
@@ -90,11 +100,10 @@ const Blogs: NextPageWithLayout = () => {
   };
 
   const UpdateModal = (values: any) => {
+    setDatas(values);
+    console.log(datas)
     setIsUpdateOpen(true);
-    console.log(values);
-    return(
-      values
-    )
+    
   };
 
   const onUpdate = (values: any) => {
@@ -129,7 +138,10 @@ const Blogs: NextPageWithLayout = () => {
       },
     });
   };
+
+
   return (
+    <PrivateRoute>
     <Row justify={"center"}>
       <Col span={23}>
         <div>
@@ -189,7 +201,51 @@ const Blogs: NextPageWithLayout = () => {
         >
           <ModalInstructuion />
         </Modal>
-        
+        <Modal
+        title={"Обновить " + datas.name}
+        open={isUpdateOpen}
+        onOk={() => {
+          form.submit(), handleOk(), success();
+        }}
+        okText={"Сохранить"}
+        cancelText={"Отменить"}
+        onCancel={() => {
+          setDatas({id: '', name: '', filling: '', image: ''})
+          closeUpdate(),
+          fail()
+        }}
+      >
+        <Form
+          form={form}
+          initialValues={datas}
+          onFinish={(formdata) => onUpdate(formdata)}
+        >
+          <Form.Item name="id">
+            <Input placeholder="id" disabled />
+          </Form.Item>
+          <Form.Item name="image">
+            <Input placeholder="URL изображения" required />
+          </Form.Item>
+
+          <Form.Item
+            requiredMark
+            name="name"
+            required
+            // initialValue={data.name}
+            style={{ marginRight: "20px" }}
+          >
+            <Input placeholder="Название" required />
+          </Form.Item>
+          <Form.Item
+            name="filling"
+            required
+            style={{ marginRight: "20px" }}
+           //  initialValue={data.filling}
+          >
+            <TextArea rows={4} placeholder="Статья" required />
+          </Form.Item>
+        </Form>
+      </Modal>
         {data?.blog.map((blog: any) => (
           <div key={blog.id}>
             <BlogList
@@ -204,7 +260,7 @@ const Blogs: NextPageWithLayout = () => {
         
       </Col>
     </Row>
-    
+    </PrivateRoute>
   );
 };
 Blogs.getLayout = function getLayout(page: ReactElement) {

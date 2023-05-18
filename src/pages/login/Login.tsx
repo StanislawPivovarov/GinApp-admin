@@ -15,13 +15,14 @@ import { Comfortaa } from "next/font/google";
 import StartPage from "@/layouts/StartPage";
 import { NextPageWithLayout } from "../_app";
 import { useRouter } from "next/router";
+import { Form } from "antd";
 
 const comfortaa = Comfortaa({
   weight: "400",
   subsets: ["latin"],
 });
 
-const Login: NextPageWithLayout  = () => {
+const Login: NextPageWithLayout = () => {
   return (
     <Main>
       <Left>
@@ -32,20 +33,30 @@ const Login: NextPageWithLayout  = () => {
         <HeaderText className={comfortaa.className}>
           Вход в админ-панель
         </HeaderText>
-        <InputField prefix={<Person />} placeholder="Ваш логин" />
-        <InputField prefix={<Key />} placeholder="Ваш пароль" type="password" />
-        <LoginButton className={comfortaa.className}>Войти</LoginButton>
-      </Right> 
+        <Form>
+          <Form.Item name="email">
+            <InputField prefix={<Person />} placeholder="Ваш логин" />
+          </Form.Item>
+          <Form.Item name="password">
+            <InputField
+              prefix={<Key />}
+              placeholder="Ваш пароль"
+              type="password"
+            />
+          </Form.Item>
+          <Form.Item>
+          <LoginButton className={comfortaa.className}>Войти</LoginButton>
+          </Form.Item>
+        </Form>
+
+       
+      </Right>
     </Main>
   );
 };
 
 Login.getLayout = function getLayout(page: ReactElement) {
-  return(
-    <StartPage>
-      {page}
-    </StartPage>
-  )
-}
+  return <StartPage>{page}</StartPage>;
+};
 
 export default Login;
