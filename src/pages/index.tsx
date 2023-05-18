@@ -36,7 +36,7 @@ const client = new ApolloClient({
   uri: `${process.env.ENTRY_POINT}`,
   cache: new InMemoryCache(),
 });
-
+console.log(process.env.FIREBASE_API_KEY)
 export default function Home() {
   const [form] = Form.useForm();
   const router = useRouter();
