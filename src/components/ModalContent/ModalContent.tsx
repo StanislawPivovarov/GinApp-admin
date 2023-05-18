@@ -15,7 +15,7 @@ const ModalContent = () => {
   }, []);
 
   const onFinish = (values: any) => {
-    console.log("Finish:", values);
+    // console.log("Finish:", values);
   };
 
   const handleSubmit = (values: any) => {
@@ -31,23 +31,23 @@ const ModalContent = () => {
     <Form form={form}>
       <Form.Item>
         {/* <ImageUpload /> */}
-        <Input placeholder="URL изображения" required />
+        <Input placeholder='URL изображения' required />
       </Form.Item>
-      <Form.Item required style={{ marginRight: "20px" }}>
-        <Input placeholder="Название" required />
+      <Form.Item required style={{ marginRight: '20px' }}>
+        <Input placeholder='Название' required />
       </Form.Item>
-      <Form.Item required style={{ marginRight: "20px" }}>
-        <Input placeholder="Описание" required />
+      <Form.Item required style={{ marginRight: '20px' }}>
+        <Input placeholder='Описание' required />
       </Form.Item>
-      <Form.Item required style={{ width: "300px", marginRight: "20px" }}>
+      <Form.Item required style={{ width: '300px', marginRight: '20px' }}>
         <Select>
           {data?.category.map((category: any) => (
-            <Select.Option value={category.id}>{category.name}</Select.Option>
+            <Select.Option key={category.id} value={category.id}>{category.name}</Select.Option>
           ))}
         </Select>
       </Form.Item>
       <Form.Item required style={{ marginRight: "20px" }}>
-        <Input placeholder="Цена" suffix="₽" />
+        <Input placeholder='Цена' suffix='₽' />
       </Form.Item>
     </Form>
   );

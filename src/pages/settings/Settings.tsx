@@ -125,7 +125,7 @@ const Settings: NextPageWithLayout = () => {
           </Button>
         </div>
         <h3 style={{ margin: "10px 0" }}>
-          Активные изображения - рекоммендуется ставить статус "активный" на не
+          Активные изображения - рекоммендуется ставить статус `&quot;`активный`&quot;` на не
           более, чем пяти изображениях
         </h3>
         <Grid>
@@ -191,7 +191,7 @@ const Settings: NextPageWithLayout = () => {
             >
               <Select>
                 {category?.carouselCategory.map((category: any) => (
-                  <Select.Option value={category.id}>
+                  <Select.Option key={category.id} value={category.id}>
                     {category.category}
                   </Select.Option>
                 ))}
