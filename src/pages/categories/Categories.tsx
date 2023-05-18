@@ -163,6 +163,7 @@ const Categories: NextPageWithLayout = () => {
               description={category.description}
               image={category.image}
               onClick={() => onDelete(category.id)}
+              edit={() => console.log("edit")}
             />
           </div>
         ))}
