@@ -173,7 +173,7 @@ const Products: NextPageWithLayout = () => {
             >
               <Select>
                 {category?.category.map((category: any) => (
-                  <Select.Option value={category.id}>
+                  <Select.Option key={category.id} value={category.id}>
                     {category.name}
                   </Select.Option>
                 ))}
@@ -233,7 +233,7 @@ const Products: NextPageWithLayout = () => {
             >
               <Select>
                 {category?.category.map((category: any) => (
-                  <Select.Option value={category.id}>
+                  <Select.Option key={category.id} value={category.id}>
                     {category.name}
                   </Select.Option>
                 ))}
