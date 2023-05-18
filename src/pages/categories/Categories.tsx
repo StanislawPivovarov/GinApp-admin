@@ -1,5 +1,5 @@
 import AdminPage from "@/layouts/AdminPage";
-import React, { ReactElement, useState } from "react";
+import React, { ReactElement, useEffect, useState } from "react";
 import { NextPageWithLayout } from "../_app";
 import { AddButton, ButtonText } from "@/styles/global";
 import { PlusCircleOutlined } from "@ant-design/icons";
@@ -18,6 +18,11 @@ const Categories: NextPageWithLayout = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isInstructionOpen, setInstructionOpen] = useState(false);
   const [form] = Form.useForm();
+  const [datas, setDatas] = useState({id: '', name: "", filling: '', image: ''});
+  useEffect(() => {
+    form.setFieldsValue(datas)
+   }, [form, datas])
+   
 
   const onSave = (values: any) => {
     console.log(values);
@@ -161,6 +166,7 @@ const Categories: NextPageWithLayout = () => {
             />
           </div>
         ))}
+        
       </Col>
     </Row>
   );
