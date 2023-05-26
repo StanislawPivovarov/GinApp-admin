@@ -47,7 +47,7 @@ export default function Home() {
       <div className={styles.right}>
         <h2 className={styles.headerText}>Вход в админ-панель</h2>
         <Form className={styles.form} form={form} onFinish={(formdata) => onSave(formdata)}>
-          <Form.Item  name="email">
+          <Form.Item name="email">
             <Input
               className={styles.inputField}
               prefix={<Person />}
