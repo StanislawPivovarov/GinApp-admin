@@ -1,8 +1,9 @@
 import React, { MouseEventHandler } from "react";
 import Image from "next/image";
 import { Button } from "antd";
-import { Category, Content, Cover, Description, Info, Name, Price, Wrapper } from "./style";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+
+import styles from "./ListItem.module.scss";
 
 interface ListProps {
   image: any;
@@ -11,27 +12,37 @@ interface ListProps {
   description: any;
   category: String;
   onClick: MouseEventHandler;
-//   change: MouseEventHandler;
-//   delete: MouseEventHandler;
+  //   change: MouseEventHandler;
+  //   delete: MouseEventHandler;
 }
 
 const ListItem = (props: ListProps) => {
   return (
-    <Wrapper>
-      <Cover width={100} height={100} src={`${props.image}`} alt="logo" />
-      <Content>
-        <Name>{props.name}</Name>
-        <Description>{props.description}</Description>
-      </Content>
-      <Info>
-        <Category>{props.category}</Category>
-        <Price>{props.price}₽</Price>
-      </Info>
-      <div>
-        <Button type="link"><EditOutlined /> Изменить</Button>
-        <Button type="link" onClick={props.onClick}><DeleteOutlined /> Удалить</Button>
+    <div className={styles.wrapper}>
+      <Image
+        className={styles.cover}
+        width={100}
+        height={100}
+        src={`${props.image}`}
+        alt="logo"
+      />
+      <div className={styles.content}>
+        <p className={styles.name}>{props.name}</p>
+        <p className={styles.description}>{props.description}</p>
       </div>
-    </Wrapper>
+      <div className={styles.info}>
+        <p className={styles.category}>{props.category}</p>
+        <p className={styles.price}>{props.price}₽</p>
+      </div>
+      <div>
+        <Button type="link">
+          <EditOutlined /> Изменить
+        </Button>
+        <Button type="link" onClick={props.onClick}>
+          <DeleteOutlined /> Удалить
+        </Button>
+      </div>
+    </div>
   );
 };
 

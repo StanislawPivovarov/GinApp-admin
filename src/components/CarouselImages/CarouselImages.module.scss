@@ -1,0 +1,21 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 250px;
+}
+
+.cover {
+  border-radius: 20px;
+}
+
+.button {
+  margin-top: 10px;
+  width: 120px;
+  margin-right: 5px;
+}
+
+.buttonsWrapper {
+  display: flex;
+  width: 250px;
+  justify-content: flex-start;
+}

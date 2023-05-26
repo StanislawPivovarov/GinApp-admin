@@ -8,10 +8,10 @@ const AdminPage = ({children}: any) => {
     return(
         <PrivateRoute>
         <Row>
-            <Col md={5} lg={3}>
+            <Col md={5} lg={4}>
                 <SideMenu/>
             </Col>
-            <Col span={18} lg={21}>
+            <Col span={18} lg={20}>
                 <Header/>
                 {children}
             </Col>

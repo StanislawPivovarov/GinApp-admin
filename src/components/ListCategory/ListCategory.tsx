@@ -2,8 +2,8 @@ import React, { MouseEventHandler } from "react";
 import Image from "next/image";
 import { Button } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { Content, Cover, Description, Name, Wrapper } from "./style";
 
+import styles from "./ListCategory.module.scss";
 interface categoryProps {
   name: String;
   description: String;
@@ -14,17 +14,22 @@ interface categoryProps {
 
 const onDelete = (values: any) => {
   console.log(values.id);
-}
-
+};
 
 const ListCategory = (props: categoryProps) => {
   return (
-    <Wrapper>
-      <Cover src={`${props.image}`} alt="cover" width={100} height={100} />
-      <Content>
-        <Name>{props.name}</Name>
-        <Description>{props.description}</Description>
-      </Content>
+    <div className={styles.wrapper}>
+      <Image
+        className={styles.cover}
+        src={`${props.image}`}
+        alt="cover"
+        width={100}
+        height={100}
+      />
+      <div className={styles.content}>
+        <p className={styles.name}>{props.name}</p>
+        <p className={styles.description}>{props.description}</p>
+      </div>
       <div>
         <Button onClick={props.edit} type="link">
           <EditOutlined /> Изменить
@@ -33,7 +38,7 @@ const ListCategory = (props: categoryProps) => {
           <DeleteOutlined /> Удалить
         </Button>
       </div>
-    </Wrapper>
+    </div>
   );
 };
 

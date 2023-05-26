@@ -1,9 +1,10 @@
 import React from "react";
-import { HeaderWrapper } from "./style";
 import { Button } from "antd";
 import { signOut } from "firebase/auth"
 import { auth } from "@/auth/firebase";
 import { useRouter } from "next/router";
+import style from './Header.module.scss'
+import { PoweroffOutlined } from "@ant-design/icons";
 
 const Header = () => {
     const router = useRouter();
@@ -11,10 +12,12 @@ const Header = () => {
         signOut(auth)
         .then(() => router.push("/"))
     }
+    
     return(
-        <HeaderWrapper>
-            <Button onClick={logout}>Выйти</Button>
-        </HeaderWrapper>
+        <div className={style.wrapper}>
+            <p className={style.helloMessege}>Здравствуйте, <b>{auth.currentUser?.email}</b></p>
+            <Button className={style.logout} onClick={logout}><PoweroffOutlined /> Выйти</Button>
+        </div>
     )
 }
 

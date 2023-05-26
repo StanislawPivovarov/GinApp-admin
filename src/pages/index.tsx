@@ -1,16 +1,7 @@
-import Head from "next/head";
-import Image from "next/image";
 import { Comfortaa, Ubuntu_Condensed } from "next/font/google";
-import Login from "./login";
-import { BrowserRouter } from "react-router-dom";
-
-import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
-import Admin from "./admin";
-import Statistic from "./statistics";
-import AdminPage from "@/layouts/AdminPage";
-import StartPage from "@/layouts/StartPage";
+import { ApolloClient, InMemoryCache } from "@apollo/client";
 import { auth } from "../auth/firebase";
-import { AuthProvider, signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import {
   HeaderText,
   InputField,
@@ -23,20 +14,16 @@ import {
   Person,
   Right,
 } from "../styles/login/styles";
-import { Form } from "antd";
-import { error } from "console";
+import { Button, Form, Input } from "antd";
 import { useRouter } from "next/router";
+import styles from "../styles/login/Login.module.scss";
 
-const comfortaa = Comfortaa({
-  weight: "400",
-  subsets: ["latin"],
-});
 
 const client = new ApolloClient({
   uri: `${process.env.ENTRY_POINT}`,
   cache: new InMemoryCache(),
 });
-console.log(process.env.FIREBASE_API_KEY)
+console.log(process.env.FIREBASE_API_KEY);
 export default function Home() {
   const [form] = Form.useForm();
   const router = useRouter();
@@ -52,36 +39,36 @@ export default function Home() {
       });
   };
   return (
-    <Main>
-      <Left>
+    <div className={styles.main}>
+      <div className={styles.left}>
         <Logotype />
-      </Left>
+      </div>
       <Line type="vertical" />
-      <Right>
-        <HeaderText className={comfortaa.className}>
-          Вход в админ-панель
-        </HeaderText>
-        <Form form={form} onFinish={(formdata) => onSave(formdata)}>
-          <Form.Item name="email">
-            <InputField prefix={<Person />} placeholder="Ваш логин" />
+      <div className={styles.right}>
+        <h2 className={styles.headerText}>Вход в админ-панель</h2>
+        <Form className={styles.form} form={form} onFinish={(formdata) => onSave(formdata)}>
+          <Form.Item  name="email">
+            <Input
+              className={styles.inputField}
+              prefix={<Person />}
+              placeholder="Ваш логин"
+            />
           </Form.Item>
           <Form.Item name="password">
-            <InputField
+            <Input
+              className={styles.inputField}
               prefix={<Key />}
               placeholder="Ваш пароль"
               type="password"
             />
           </Form.Item>
-          <Form.Item>
-            <LoginButton
-              onClick={form.submit}
-              className={comfortaa.className}
-            >
+          <Form.Item className={styles.formItem}>
+            <Button onClick={form.submit} className={styles.loginButton}>
               Войти
-            </LoginButton>
+            </Button>
           </Form.Item>
         </Form>
-      </Right>
-    </Main>
+      </div>
+    </div>
   );
 }

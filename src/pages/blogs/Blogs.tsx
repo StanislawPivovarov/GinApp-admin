@@ -30,8 +30,6 @@ const Blogs: NextPageWithLayout = () => {
   const [form] = Form.useForm();
   const [isInstructionOpen, setInstructionOpen] = useState(false);
   const { TextArea } = Input;
-
-  
   const [datas, setDatas] = useState({id: '', name: "", filling: '', image: ''});
   useEffect(() => {
     form.setFieldsValue(datas)
@@ -139,7 +137,7 @@ console.log('QWE', datas)
     });
   };
 
-
+console.log(data)
   return (
     <PrivateRoute>
     <Row justify={"center"}>
