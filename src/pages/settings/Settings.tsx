@@ -1,5 +1,5 @@
 import AdminPage from "@/layouts/AdminPage";
-import React, { ReactElement, useState } from "react";
+import React, { ReactElement, use, useEffect, useState } from "react";
 import { NextPageWithLayout } from "../_app";
 import { AddButton, ButtonText } from "@/styles/global";
 import { PlusCircleOutlined } from "@ant-design/icons";
@@ -17,12 +17,20 @@ import {
 import logoanim from "../../assets/logo-animated.svg";
 import { Loader } from "@/styles/login/styles";
 import { Grid } from "../../styles/settings/style";
-import { ADD_CAROUSEL, REMOVE_CAROUSEL } from "@/graphql/mutations";
+import { ADD_CAROUSEL, REMOVE_CAROUSEL, UPDATE_CAROUSEL } from "@/graphql/mutations";
 
 const Settings: NextPageWithLayout = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isInstructionOpen, setInstructionOpen] = useState(false);
+  const [isUpdateOpen, setIsUpdateOpen] = useState(false);
+  const [datas, setDatas] = useState({ id: '', category: '', image: '' });
   const [form] = Form.useForm();
+  const [upd] = Form.useForm();
+
+  useEffect(() => {
+    upd.setFieldsValue(datas)
+  }, [upd, datas])
+
 
   const { data: active, loading: loading_active } = useQuery(CAROUSEL_ACTIVE);
   const { data: archive, loading: loading_archive } =
@@ -50,6 +58,13 @@ const Settings: NextPageWithLayout = () => {
     ],
   });
 
+  const [updateCarousel] = useMutation(UPDATE_CAROUSEL, {
+    refetchQueries: [
+      { query: CAROUSEL_ACTIVE },
+      { query: CAROUSEL_ARCHIVE }
+    ]
+  })
+
   const onSave = (values: any) => {
     addCarousel({
       variables: {
@@ -61,7 +76,6 @@ const Settings: NextPageWithLayout = () => {
     });
   };
   const onDelete = (values: any) => {
-    console.log(values);
     removeCarousel({
       variables: {
         item: values,
@@ -69,13 +83,22 @@ const Settings: NextPageWithLayout = () => {
     });
   };
 
+  const onUpdate = (values: any) => {
+    updateCarousel({
+      variables: {
+        id: values.id,
+        carousel: values
+      }
+    })
+  }
+
   const onCheck = async () => {
     try {
       const values = await form.validateFields();
       console.log(values);
       form.submit(), handleOk(), success();
     } catch {
-      console.log("fuck you");
+      console.log(form.getFieldError)
     }
   };
 
@@ -98,6 +121,15 @@ const Settings: NextPageWithLayout = () => {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
+
+  const openUpdate = (values: any) => {
+    setDatas(values);
+    setIsUpdateOpen(true);
+  }
+
+  const hideUpdate = () => {
+    setIsUpdateOpen(false)
+  }
 
   if (
     loading_active ||
@@ -134,7 +166,7 @@ const Settings: NextPageWithLayout = () => {
               key={item.id}
               image={`${item.image}`}
               delete={() => onDelete(item.id)}
-              edit={() => console.log("pressed delete")}
+              edit={() => openUpdate(item)}
             />
           ))}
         </Grid>
@@ -146,13 +178,13 @@ const Settings: NextPageWithLayout = () => {
               key={item.id}
               image={`${item.image}`}
               delete={() => onDelete(item.id)}
-              edit={() => console.log("pressed delete")}
+              edit={() => openUpdate(item)}
             />
           ))}
         </Grid>
 
         <Modal
-          title="Добавить набор"
+          title="Добавить изображение в карусель"
           open={isModalOpen}
           onOk={() => {
             // form.submit(), handleOk(), success()
@@ -172,6 +204,56 @@ const Settings: NextPageWithLayout = () => {
           </Button>
 
           <Form form={form} onFinish={(formdata) => onSave(formdata)}>
+            <Form.Item
+              rules={[
+                { required: true, message: "Необходимо добавить изображение!" },
+              ]}
+              name="image"
+            >
+              <Input placeholder="URL изображения" required />
+            </Form.Item>
+
+            <Form.Item
+              rules={[
+                { required: true, message: "Необходимо выбрать статус!" },
+              ]}
+              name="category"
+              required
+              style={{ width: "300px", marginRight: "20px" }}
+            >
+              <Select>
+                {category?.carouselCategory.map((category: any) => (
+                  <Select.Option key={category.id} value={category.id}>
+                    {category.category}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+          </Form>
+        </Modal>
+        <Modal
+          title={"Изменить id - " + datas.id}
+          open={isUpdateOpen}
+          onOk={() => {
+            upd.submit(), hideUpdate()
+          }}
+          okText={"Сохранить"}
+          cancelText={"Отменить"}
+          onCancel={() => {
+            hideUpdate(), fail();
+          }}
+        >
+          <Button type="link" href="http://postimages.org" target="blank">
+            Хостинг для загрузки
+          </Button>
+          <Button type="link" onClick={showInstruction}>
+            Инстркуция
+          </Button>
+
+          <Form form={upd} onFinish={(formdata) => onUpdate(formdata)} initialValues={datas}>
+            <Form.Item name="id">
+              <Input placeholder="id" disabled />
+            </Form.Item>
             <Form.Item
               rules={[
                 { required: true, message: "Необходимо добавить изображение!" },

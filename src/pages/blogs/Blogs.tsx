@@ -30,13 +30,13 @@ const Blogs: NextPageWithLayout = () => {
   const [form] = Form.useForm();
   const [isInstructionOpen, setInstructionOpen] = useState(false);
   const { TextArea } = Input;
-  const [datas, setDatas] = useState({id: '', name: "", filling: '', image: ''});
+
+  const [datas, setDatas] = useState({id: '', name: '', filling: '', image: ''});
   useEffect(() => {
     form.setFieldsValue(datas)
    }, [form, datas])
    
   
-console.log('QWE', datas)
   const showInstruction = () => {
     setInstructionOpen(true);
   };

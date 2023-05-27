@@ -1,5 +1,5 @@
 import AdminPage from "@/layouts/AdminPage";
-import React, { ReactElement, useState } from "react";
+import React, { ReactElement, useEffect, useState } from "react";
 import { NextPageWithLayout } from "../_app";
 import { AddButton, ButtonText } from "@/styles/global";
 import { PlusCircleOutlined } from "@ant-design/icons";
@@ -7,20 +7,16 @@ import {
   Row,
   Col,
   Modal,
-  Avatar,
-  List,
   Form,
   Input,
   Select,
   Button,
 } from "antd";
-import { success, fail } from "@/helpers/notifications";
-import type { GetServerSideProps } from "next";
-import request, { GraphQLClient, gql } from "graphql-request";
+import { success, fail, successUpdate } from "@/helpers/notifications";
 import { useMutation, useQuery } from "@apollo/client";
-import { CATEGORIES, COFFEE, LEAF_TEA, PRODUCTS } from "@/graphql/queries";
+import { CATEGORIES, PRODUCTS } from "@/graphql/queries";
 import ListItem from "@/components/ListItem";
-import { INSERT_PRODUCT, REMOVE_PRODUCT } from "@/graphql/mutations";
+import { INSERT_PRODUCT, REMOVE_PRODUCT, UPDATE_PRODUCT } from "@/graphql/mutations";
 import ModalInstructuion from "@/components/ModalInstruction";
 import logoanim from "../../assets/logo-animated.svg";
 import { Loader } from "@/styles/login/styles";
@@ -28,8 +24,15 @@ import { Loader } from "@/styles/login/styles";
 const Products: NextPageWithLayout = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isUpdateOpen, setIsUpdateOpen] = useState(false);
+  const [datas, setDatas] = useState({ id: '', name: '', category: '', image: '', price: '', description: '' });
   const [form] = Form.useForm();
+  const [upd] = Form.useForm();
   const [isInstructionOpen, setInstructionOpen] = useState(false);
+
+  useEffect(() => {
+    upd.setFieldsValue(datas)
+  }, [upd, datas])
+
 
   const showInstruction = () => {
     setInstructionOpen(true);
@@ -53,18 +56,19 @@ const Products: NextPageWithLayout = () => {
     form.resetFields();
   };
 
-  const showUpdate = (values: any) => {
+  const UpdateModal = (values: any) => {
+    setDatas(values);
     setIsUpdateOpen(true);
-    console.log(values);
   };
 
   const closeUpdate = () => {
-    setIsUpdateOpen(false);
+    setIsUpdateOpen(false)
   };
+
+
 
   const { data, loading } = useQuery(PRODUCTS);
   const { data: category }: any = useQuery(CATEGORIES);
-  console.log({ data });
 
   const [addProduct, { data: mut, loading: loadmut, error: errmut }] =
     useMutation(INSERT_PRODUCT, {
@@ -77,6 +81,12 @@ const Products: NextPageWithLayout = () => {
       refetchQueries: [{ query: PRODUCTS }, "GET_PRODUCTS"],
     }
   );
+
+  const [updateProduct] = useMutation(
+    UPDATE_PRODUCT, {
+    refetchQueries: [{ query: PRODUCTS }, "GET_CATEGORIES"]
+  }
+  )
 
   const onDelete = (values: any) => {
     console.log(values);
@@ -97,7 +107,6 @@ const Products: NextPageWithLayout = () => {
     );
   }
   const onSave = (values: any) => {
-    console.log(values);
     addProduct({
       variables: {
         product: {
@@ -111,6 +120,18 @@ const Products: NextPageWithLayout = () => {
       },
     });
   };
+
+  const onUpdate = (values: any) => {
+    updateProduct({
+      variables: {
+        id: values.id,
+        product: values
+      }
+    })
+    setIsUpdateOpen(false);
+  }
+
+  console.log(datas)
 
   return (
     <Row justify={"center"}>
@@ -135,12 +156,12 @@ const Products: NextPageWithLayout = () => {
           title="Добавить набор"
           open={isModalOpen}
           onOk={() => {
-            form.submit(), handleOk(), success();
+            form.submit(), handleOk(), success()
           }}
           okText={"Сохранить"}
           cancelText={"Отменить"}
           onCancel={() => {
-            handleCancel(), fail();
+            handleCancel(), fail(), form.resetFields;
           }}
         >
           <Button type="link" href="http://postimages.org" target="blank">
@@ -151,8 +172,7 @@ const Products: NextPageWithLayout = () => {
           </Button>
 
           <Form form={form} onFinish={(formdata) => onSave(formdata)}>
-            <Form.Item name="image">
-              {/* <ImageUpload /> */}
+            <Form.Item name="image" required>
               <Input placeholder="URL изображения" required />
             </Form.Item>
 
@@ -193,21 +213,30 @@ const Products: NextPageWithLayout = () => {
         >
           <ModalInstructuion />
         </Modal>
+
         <Modal
-          title="Обновить продкут"
+          title={"Обновить - " + datas.name}
           open={isUpdateOpen}
           onOk={() => {
-            form.submit(), handleOk(), success();
+            upd.submit(), handleOk(), success();
           }}
           okText={"Сохранить"}
           cancelText={"Отменить"}
           onCancel={() => {
-            handleCancel(), fail();
+            closeUpdate(), fail();
           }}
         >
-          <Form form={form} onFinish={(formdata) => onSave(formdata)}>
+          <Button type="link" href="http://postimages.org" target="blank">
+            Хостинг для загрузки
+          </Button>
+          <Button type="link" onClick={showInstruction}>
+            Инстркуция
+          </Button>
+          <Form form={upd} onFinish={(formdata) => onUpdate(formdata)} initialValues={datas}>
+            <Form.Item name="id">
+              <Input placeholder="id" disabled />
+            </Form.Item>
             <Form.Item name="image">
-              {/* <ImageUpload /> */}
               <Input placeholder="URL изображения" required />
             </Form.Item>
 
@@ -219,6 +248,7 @@ const Products: NextPageWithLayout = () => {
             >
               <Input placeholder="Название" required />
             </Form.Item>
+
             <Form.Item
               name="description"
               required
@@ -226,6 +256,7 @@ const Products: NextPageWithLayout = () => {
             >
               <Input placeholder="Описание" required />
             </Form.Item>
+
             <Form.Item
               name="category"
               required
@@ -239,11 +270,16 @@ const Products: NextPageWithLayout = () => {
                 ))}
               </Select>
             </Form.Item>
+
             <Form.Item name="price" required style={{ marginRight: "20px" }}>
               <Input placeholder="Цена" suffix="₽" />
             </Form.Item>
+
           </Form>
         </Modal>
+
+
+        {/* отображение товаров */}
         {data?.product.map((product: any) => (
           <div key={product.id}>
             <ListItem
@@ -252,10 +288,12 @@ const Products: NextPageWithLayout = () => {
               image={product.image}
               price={product.price}
               category={product.product_category.name}
-              onClick={() => onDelete(product.id)}
+              delete={() => onDelete(product.id)}
+              edit={() => UpdateModal(product)}
             />
           </div>
         ))}
+
       </Col>
     </Row>
   );

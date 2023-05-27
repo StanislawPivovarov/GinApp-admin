@@ -11,9 +11,8 @@ interface ListProps {
   price: any;
   description: any;
   category: String;
-  onClick: MouseEventHandler;
-  //   change: MouseEventHandler;
-  //   delete: MouseEventHandler;
+    edit: MouseEventHandler;
+    delete: MouseEventHandler;
 }
 
 const ListItem = (props: ListProps) => {
@@ -35,10 +34,10 @@ const ListItem = (props: ListProps) => {
         <p className={styles.price}>{props.price}₽</p>
       </div>
       <div>
-        <Button type="link">
+        <Button type="link" onClick={props.edit}>
           <EditOutlined /> Изменить
         </Button>
-        <Button type="link" onClick={props.onClick}>
+        <Button type="link" onClick={props.delete}>
           <DeleteOutlined /> Удалить
         </Button>
       </div>

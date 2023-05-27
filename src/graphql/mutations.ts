@@ -72,18 +72,7 @@ mutation ($blog: Int!) {
 }
 `;
 
-export const UPDATE_BLOG = gql`
-mutation ($blog: blog_set_input!, $id: Int!) {
-  update_blog(where: {id: {_eq: $id}}, _set: $blog) {
-    returning {
-      name
-      image
-      id
-      filling
-    }
-  }
-}
-`;
+
 
 export const ADD_CAROUSEL = gql`
 mutation ($carousel: carousel_insert_input!) {
@@ -102,6 +91,59 @@ mutation ($item: Int!) {
   delete_carousel(where: {id: {_eq: $item}}){
     returning{
       id
+    }
+  }
+}
+`
+
+export const UPDATE_BLOG = gql`
+mutation ($blog: blog_set_input!, $id: Int!) {
+  update_blog(where: {id: {_eq: $id}}, _set: $blog) {
+    returning {
+      name
+      image
+      id
+      filling
+    }
+  }
+}
+`;
+
+export const UPDATE_PRODUCT = gql`
+mutation ($product: product_set_input!, $id: Int!) {
+  update_product(where: {id: {_eq: $id}}, _set: $product) {
+    returning {
+      name
+      image
+      id
+      price
+      description
+      category
+    }
+  }
+}
+`;
+
+export const UPDATE_CAROUSEL = gql`
+mutation ($carousel: carousel_set_input!, $id: Int!) {
+  update_carousel(where: {id: {_eq: $id}}, _set: $carousel) {
+    returning {
+      image
+      id
+      category
+    }
+  }
+}
+`;
+
+export const UPDATE_CATEGORY = gql`
+mutation ($category: category_set_input!, $id: Int!) {
+  update_category(where: {id: {_eq: $id}}, _set: $category) {
+    returning {
+      image
+      id
+      name
+      description
     }
   }
 }
